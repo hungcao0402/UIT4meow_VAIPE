@@ -73,7 +73,7 @@ cd ../../../..
 ## Inference on testing data
 For inference to submit, we provide a file script to run the complete pipeline. **The file results.zip to submit will be in foler output.**
 ### Download weight
-Download the pretrained models, you can download these files [here](https://drive.google.com/drive/folders/11XSR6IduvGkuzzDev5jYnMSsr6Lw6qt2?usp=sharing) and move them to folder **weights** 
+Download the pretrained models, you can download these files [here](https://drive.google.com/drive/folders/11XSR6IduvGkuzzDev5jYnMSsr6Lw6qt2?usp=sharing) and move them to folder **weights** , [backbone](https://drive.google.com/file/d/1V-1rMKxQBYwpz77R6axzzU13yaQdu4MU/view?usp=sharing) to **DINO/pretrained**
  or run script below.
 ```
 bash scripts/download_infer.sh
