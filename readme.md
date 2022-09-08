@@ -71,7 +71,7 @@ cd ../../../..
 ---
 
 ## Inference on testing data
-For inference to submit, we provide a file script to run the complete pipeline. The file results.zip to submit will be in foler output.
+For inference to submit, we provide a file script to run the complete pipeline. **The file results.zip to submit will be in foler output.**
 ```
 #Download weight
 bash scripts/download_infer.sh
