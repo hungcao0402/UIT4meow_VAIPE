@@ -6,7 +6,7 @@ train_root: ../dataset/classify/train/
 val_root: ../dataset/classify/val/
 data_size: 384
 num_workers: 4
-batch_size: 8
+batch_size: 16
 model_name: swin-t
 pretrained: ~
 optimizer: SGD

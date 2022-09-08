@@ -1,7 +1,15 @@
 # VAIPE: Medicine Pill Image Recognition Challenge - Team: UIT4meow solution
 
+## Table of contents
+
+  - [Environment Setup:](#environment-setup)
+  - [Inference on testing data](#inference-on-testing-data)
+  - [Train](#train)
+
+---
+
 ## Environment Setup:
-We recommend to use Docker for building environment.
+We recommend to useDocker for bng environment.
 1. Build Docker Image with Dockerfile:
 ```
 docker build -t uit4meow - < Dockerfile
@@ -59,6 +67,9 @@ cd DINO/models/dino/ops
 python setup.py build install
 cd ../../../..
 ```
+
+---
+
 ## Inference on testing data
 For inference to submit, we provide a file script to run the complete pipeline. The file results.zip to submit will be in foler output.
 ```
@@ -68,7 +79,11 @@ bash scripts/download_infer.sh
 bash run.sh /data/public_test 0     # 0 is gpu-id
 ```
 
+---
+
 ## Train
+Train on 2 GPUs Tesla P40 24GB
+
 <details>
       <summary>Yolov7</summary>
     
@@ -81,7 +96,7 @@ bash run.sh /data/public_test 0     # 0 is gpu-id
             --name yolov7x --hyp data/hyp.scratch.p5.yaml
 </details>
 <details>
-      <summary>vietocr</summary>
+      <summary>VietOCR</summary>
 
       python tools/crop_pres.py
       CUDA_VISIBLE_DEVICES=0 python train_vietocr.py
