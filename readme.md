@@ -65,7 +65,7 @@ For inference to submit, we provide a file script to run the complete pipeline. 
 #Download weight
 bash scripts/download_infer.sh
 
-bash run.sh /data/public_test/ 0
+bash run.sh /data/public_test 0     # 0 is gpu-id
 ```
 
 ## Train
