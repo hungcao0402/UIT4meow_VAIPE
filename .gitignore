@@ -1,0 +1,6 @@
+DINO/pretrained
+DINO/*.pth
+DINO/logs
+output
+dataset
+weights

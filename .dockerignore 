@@ -1,0 +1,6 @@
+output/
+weights/
+DINO/
+classify/
+yolov7/
+output

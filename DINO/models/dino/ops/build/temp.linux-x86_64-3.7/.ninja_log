@@ -1,0 +1,13 @@
+# ninja log v5
+3	3737	1660754383559502339	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.o	c3ebba20a71b0108
+2	19093	1660754398888545670	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/vision.o	51b37f1d085587cb
+3	25150	1660754404958961660	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.o	a436bce6c7d7c615
+12	5071	1660757573251597112	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.o	49e4ee1df5e85ce7
+11	23450	1660757591620848582	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/vision.o	a774eeb8dc4f0234
+12	32487	1660757600654004246	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.o	1571dc444ef2372
+2	4962	1660770121	/workspace/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/workspace/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.o	4ca0722ac64096a5
+2	24169	1660770140	/workspace/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/workspace/DINO/models/dino/ops/src/vision.o	b855e4365cea7157
+2	32032	1660770148	/workspace/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/workspace/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.o	48241fad021bf57f
+2	7984	1661759781	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.o	49e4ee1df5e85ce7
+2	37713	1661759810	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/vision.o	a774eeb8dc4f0234
+3	51478	1661759824	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.7/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.o	1571dc444ef2372

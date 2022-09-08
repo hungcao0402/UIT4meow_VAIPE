@@ -1,0 +1,4 @@
+# ninja log v5
+2	3662	1660758985753399224	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.8/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.o	198f18e7943e8891
+2	20259	1660759002334040516	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.8/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/vision.o	37ada3ab11ed94fa
+2	21985	1660759004063809991	/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/build/temp.linux-x86_64-3.8/mlcv/WorkingSpace/Personals/hungcv/temp/pipeline/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.o	43528e1fb7a426b9
