@@ -72,10 +72,15 @@ cd ../../../..
 
 ## Inference on testing data
 For inference to submit, we provide a file script to run the complete pipeline. **The file results.zip to submit will be in foler output.**
+### Download weight
+Download the pretrained models, you can download these files [here](https://drive.google.com/drive/folders/11XSR6IduvGkuzzDev5jYnMSsr6Lw6qt2?usp=sharing) and move them to folder **weights** 
+ or run script below.
 ```
-#Download weight
 bash scripts/download_infer.sh
+```
 
+### Inference
+```
 bash run.sh /data/public_test 0     # 0 is gpu-id
 ```
 
