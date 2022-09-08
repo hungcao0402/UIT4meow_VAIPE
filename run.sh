@@ -12,7 +12,7 @@ CUDA_VISIBLE_DEVICES=$2 python3 yolov7/detect_ocr.py --weights ./weights/yolov7_
 cd DINO 
 CUDA_VISIBLE_DEVICES=$2 python inference.py --source $pill_image_path   \
                 --output '/temp/detect' \
-                --thershold 0.4 \
+                --thershold 0.6 \
                 --model_config_path ./config/DINO/infer.py      \
                 --model_checkpoint_path ../weights/checkpoint_best_regular.pth
 cd ..
