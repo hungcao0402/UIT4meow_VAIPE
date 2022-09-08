@@ -16,7 +16,7 @@ docker build -t uit4meow - < Dockerfile
 ```
 2. Run Docker container:
 ```
-docker run -it --rm -v DATA_DIR:/data/:ro -v "$PWD":/workspace  --gpus all --ipc=host --name uit4meow uit4meow bash
+docker run -it -v DATA_DIR:/data/:ro -v "$PWD":/workspace  --gpus all --ipc=host --name uit4meow uit4meow bash
 ```
 
 Where `DATA_DIR=<path to public_test folder>`.
