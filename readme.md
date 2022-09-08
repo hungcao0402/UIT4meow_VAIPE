@@ -9,7 +9,7 @@
 ---
 
 ## Environment Setup:
-We recommend to useDocker for bng environment.
+We recommend to use Docker for building environment.
 1. Build Docker Image with Dockerfile:
 ```
 docker build -t uit4meow - < Dockerfile
