@@ -8,7 +8,7 @@ CUDA_VISIBLE_DEVICES=$2 python3 yolov7/detect_ocr.py --weights ./weights/yolov7_
          --source $pres_image_path  \
          --project /tempt/ocr --weights_ocr ./weights/vietocr.pt
 
-# # Detect pill
+# # # Detect pill
 cd DINO 
 CUDA_VISIBLE_DEVICES=$2 python inference.py --source $pill_image_path   \
                 --output '/tempt/detect' \
@@ -23,6 +23,6 @@ CUDA_VISIBLE_DEVICES=$2 python infer_vote.py --c ./config/infer_108class.yaml \
         --csv_path /tempt/detect/output.csv   \
         --input_root /tempt/detect/crop_img       \
         --ocr_root /tempt/ocr/exp/labels \
-        --output ../output1/results.csv
+        --output ../output/results.csv
 
 cd ../output && zip results.zip results.csv

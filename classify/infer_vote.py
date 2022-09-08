@@ -113,7 +113,7 @@ def main_test(args, tlogger):
             # conf_new = conf
             df.loc[df.image_name == filename, ['image_name','class_id','confidence_score']]=[filename_new, class_id, 1.0]
             
-            
+    os.makedirs(os.path.basename(args.output), exist_ok = True)    
     df.to_csv(args.output,index=False)
   
 class DataFromCSV(torch.utils.data.Dataset):

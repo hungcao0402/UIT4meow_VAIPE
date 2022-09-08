@@ -72,7 +72,6 @@ def main(opt):
                 id_test = os.path.basename(path).split('_')[2]
                 
                 try:
-                    
                     cv2.imwrite(path_crop,img_crop)
                     #create coco format
                 except:
