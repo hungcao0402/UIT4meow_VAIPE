@@ -69,47 +69,50 @@ bash run.sh /data/public_test 0     # 0 is gpu-id
 ```
 
 ## Train
+<details>
+      <summary>Yolov7</summary>
+    
+      python tools/generate_train_detect_pres.py
+      cd yolov7
+      CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node 2 train.py    \
+            --epoch 50 --single-cls --workers 8 --device 0,1 --sync-bn     \
+            --batch-size 8 --data data/coco.yaml --img 640 640      \
+            --cfg cfg/training/yolov7x.yaml --weights ''     \
+            --name yolov7x --hyp data/hyp.scratch.p5.yaml
+</details>
+<details>
+      <summary>vietocr</summary>
 
-### 1. Pres
-#### 1.1. Yolov7  
-```
-python tools/generate_train_detect_pres.py
-cd yolov7
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node 2 train.py    \
-       --epoch 50 --single-cls --workers 8 --device 0,1 --sync-bn     \
-       --batch-size 8 --data data/coco.yaml --img 640 640      \
-       --cfg cfg/training/yolov7x.yaml --weights ''     \
-       --name yolov7x --hyp data/hyp.scratch.p5.yaml
-```
-#### 1.2. vietocr  
-```
-python tools/crop_pres.py
-CUDA_VISIBLE_DEVICES=0 python train_vietocr.py
-```
+      python tools/crop_pres.py
+      CUDA_VISIBLE_DEVICES=0 python train_vietocr.py
+</details>
 
-### 2. Pill
-#### 2.1. DINO
-```
-#prepare data
-ln -s /data/public_train ./dataset/dino/train2017
-ln -s /data/public_val ./dataset/dino/val2017
-cp -r ./DINO/annotations ./dataset/dino
+<details>
+      <summary>DINO</summary>
 
-#prepare pretrained
-bash scripts/download_train.sh
-cd DINO
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py \
-	--pretrain_model_path './checkpoint0011_4scale_swin'	\
-	--finetune_ignore label_enc.weight class_embed	\
-	--output_dir logs_swin/4scale -c config/DINO/DINO_4scale_swin.py --coco_path ../dataset/dino_data \
-	--options dn_scalar=100 embed_init_tgt=TRUE \
-	dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False \
-	dn_box_noise_scale=1.0 backbone_dir='./pretrained'
+      prepare data
+      ln -s /data/public_train ./dataset/dino/train2017
+      ln -s /data/public_val ./dataset/dino/val2017
+      cp -r ./DINO/annotations ./dataset/dino
 
-```
-#### 2.2 FGVC-PIM
-```
-python tools/crop.py
-cd classify
-CUDA_VISIBLE_DEVICES=0,1 python main.py --c ./configs/cfg.yaml
-```
+      prepare pretrained
+      bash scripts/download_train.sh
+      cd DINO
+      CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py \
+            --pretrain_model_path './checkpoint0011_4scale_swin'	\
+            --finetune_ignore label_enc.weight class_embed	\
+            --output_dir logs_swin/4scale -c config/DINO/DINO_4scale_swin.py --coco_path ../dataset/dino_data \
+            --options dn_scalar=100 embed_init_tgt=TRUE \
+            dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False \
+            dn_box_noise_scale=1.0 backbone_dir='./pretrained'
+
+</details>
+<details>
+      <summary>FGVC-PIM</summary>
+
+      python tools/crop.py
+      cd classify
+      CUDA_VISIBLE_DEVICES=0,1 python main.py --c ./configs/cfg.yaml
+      
+</details>
+
