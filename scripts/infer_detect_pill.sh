@@ -1,8 +1,8 @@
 cd yolov7 &&
-CUDA_VISIBLE_DEVICES=1 python3 detect_pill.py   \
+CUDA_VISIBLE_DEVICES=4 python3 detect_pill.py   \
     --conf-thres 0.1  \
     --weights "../weights/yolov7_detect_pill.pt"  \
-    --source /mlcv/Databases/VAIPE/public_test/pill/image/  \
+    --source /data/pill/image/  \
     --agnostic-nms --no-trace    \
     --project ../output/detect    \
     --img-size 1280

@@ -165,7 +165,7 @@ def detect(args,save_img=False):
                     
                     with open(csv_path, 'a', encoding='UTF8') as f:
                         writer = csv.writer(f)
-                        data = [new_img_name, class_id, conf.item(),  int(x1),int(y1),int(x2),int(y2)] #cls.item()
+                        data = [new_img_name, class_id, conf.item(),  x1,y1,x2,y2] #cls.item()
 
                         writer.writerow(data)
                     # if save_img or view_img:  # Add bbox to image

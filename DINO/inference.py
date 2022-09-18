@@ -90,34 +90,36 @@ def main(opt):
                 img_crop = img0[int(y1):int(y2), int(x1):int(x2)]
                 new_img_name=f'{id}_{os.path.basename(path)}'
                 path_crop = os.path.join(save_dir_crop,new_img_name)
-                id_test = os.path.basename(path).split('_')[2]
+                # id_test = os.path.basename(path).split('_')[2]
                 
                 try:
                     
                     cv2.imwrite(path_crop,img_crop)
                     #create coco format
-                    id_box+=1
-                    w = x2-x1
-                    h = y2-y1
-                    area=w*h
-                    box_info = {
-                            "id": id_box,
-                            "score": 1,
-                            "image_id": id_img,
-                            "category_id": 0,
-                            "area": area,
-                            "bbox": [
-                                    x1,
-                                    y1,
-                                    w,
-                                    h
-                                ],
-                            "iscrowd": 0}
-                    data_save["annotations"].append(box_info)
+                    # id_box+=1
+                    # w = x2-x1
+                    # h = y2-y1
+                    # area=w*h
+                    # box_info = {
+                    #         "id": id_box,
+                    #         "score": 1,
+                    #         "image_id": id_img,
+                    #         "category_id": 0,
+                    #         "area": area,
+                    #         "bbox": [
+                    #                 x1,
+                    #                 y1,
+                    #                 w,
+                    #                 h
+                    #             ],
+                    #         "iscrowd": 0}
+                    # data_save["annotations"].append(box_info)
 
                 except:
                     continue
-                    print(x1, y1, x2, y2)
+                    with open('fail.txt','a') as f:
+                        f.write(f'{new_img_name}  --- {x1} {y1} {x2} {y2}\n')
+                    
                     
                     x1 = max(0,x1)
                     x1 = min(x1,width)
@@ -130,8 +132,8 @@ def main(opt):
                     print(x1, y1, x2, y2)
                     img_crop = img0[int(y1):int(y2), int(x1):int(x2)]
                     cv2.imwrite(path_crop,img_crop)
-                    with open('fail.txt','a') as f:
-                        f.write(f'{new_img_name}\n')
+                    # with open('fail.txt','a') as f:
+                    #     f.write(f'{new_img_name}\n')
                     
                     # print(box)
                     

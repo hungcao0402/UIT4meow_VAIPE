@@ -31,7 +31,7 @@ def process_class_id(rec_result ,path, path_class_pill='./class.txt'):
         new_key = post_process_rec(key)
         ratio = Levenshtein.ratio(key.strip(), rec_result_new)
         # print(key, rec_result_new, ratio)
-        if ratio > 0.9:
+        if ratio > 0.85:
             out_id.append(int(id))
         
     out_id = list(set(out_id))

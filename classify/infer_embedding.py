@@ -104,7 +104,11 @@ def main_test(args, tlogger):
 
             # filter_id = id_filter[id_file]
             # class_id, conf = post_process(filter_id, tmp_score)  
+            conf_det = df.loc[df.image_name == filename,'confidence_score'].values[0]
+            
 
+            if conf_det < 0.3:
+                continue
 
             # if conf < 0.1:
             #     class_id = 107

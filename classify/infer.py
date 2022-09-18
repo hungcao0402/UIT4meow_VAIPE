@@ -16,6 +16,32 @@ warnings.simplefilter("ignore")
 import torchvision.transforms as transforms
 from tqdm import tqdm
 
+def post_process(filter_id, tmp_score):
+    id_map = ['0', '1', '10', '100', '101', '102', '103', '104', '105', '106', '107', '11', '12', '13', '14', '15', '16', '17', '18', '19', '2', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '3', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '4', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '5', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '6', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '7', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '8', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '9', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99']
+    
+    top_id = torch.topk(tmp_score[0], 3).indices
+    top_id=top_id.tolist()
+    top_id = [int(id_map[x]) for x in top_id]
+    top_conf = torch.topk(tmp_score[0], 3).values
+    top_conf=top_conf.tolist()
+                
+    class_id = 107
+    conf = 1
+    # if top_conf[0] <0.1:
+    #         return 107, top_conf[0]
+
+    for id, c in zip(top_id,top_conf):
+        for box_id in range(len(filter_id)):
+            for f_id in filter_id[box_id]:
+                if id == f_id:
+                    class_id = id
+                    conf = c
+                    filter_id[box_id] = [id]
+                    # if conf < 0.005:
+                    #     return 107, 1
+                    return class_id, conf
+    return class_id, conf
+
 def load_ids(root_path_label):
     ids_filter = dict()
     files = os.listdir(root_path_label)
@@ -46,7 +72,9 @@ def set_environment(args):
     model.to(args.device)
     model.eval()
 
-    dataset = DataCustom(istrain=False, root=args.input_root, root_ocr=args.ocr_root, data_size=args.data_size, return_index=True)
+    dataset = DataCustom(csv_file=args.csv_path, istrain=False, root=args.input_root, ocr_root=args.ocr_root, data_size=args.data_size, return_index=True)
+
+    # dataset = DataCustom(istrain=False, root=args.input_root, root_ocr=args.ocr_root, data_size=args.data_size, return_index=True)
     loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True, num_workers=args.num_workers)
 
     return model, loader
@@ -57,71 +85,98 @@ def main_test(args, tlogger):
     
     df = pd.read_csv(args.csv_path)
     id_filter = load_ids(args.ocr_root)
-
-    id_map = ['0', '1', '10', '100', '101', '102', '103', '104', '105', '106','107', '11', '12', '13', '14', '15', '16', '17', '18', '19', '2', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '3', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '4', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '5', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '6', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '7', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '8', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '9', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99']
-    out_file = open('write.txt','w')
     with torch.no_grad():
-        for batch_idx, (ids,path, images,onehots,labels) in tqdm(enumerate(loader)):
+        count=0
+        for batch_idx, (ids,path, images,labels) in tqdm(enumerate(loader)):
             filename = os.path.basename(path[0])
             filename_new = filename.split('_',1)[1]
             id_file = re.findall('[0-9]+',filename_new)[0]
 
             images = images.to(args.device)
-            onehots = onehots.to(args.device)
             outs  = model(images)
-            
 
             tmp_score = torch.softmax(outs["comb_outs"], dim=-1)
-            class_id = tmp_score.argmax().item()
-            conf = tmp_score.max().item()
-            class_id = int(id_map[class_id])
-            filter_id = id_filter[id_file]
-            # print(class_id, filter_id)
-            
-            if class_id not in filter_id:
-                class_id=107
-            if True:
-                top_id = torch.topk(tmp_score[0], 5).indices
-                
-                filter_id = id_filter[id_file]
-                top_id=top_id.tolist()
-                top_id = [int(id_map[x]) for x in top_id]
-                
-                top_conf = torch.topk(tmp_score[0], 5).values
-                top_conf=top_conf.tolist()
-             
-                class_id = 107
-                for id, c in zip(top_id, top_conf):
-                    if id in filter_id or id == 107:
-                        class_id = id
-                        conf = c
-                        break
-            print(class_id)
-            # if class_id == 108:
-            #     df.drop(df[df.image_name == filename].index, inplace=True)
-            #     print('drop')
-            #     continue
 
-            if False:
-                if conf < 0.1:
-                    class_id=107
-                    conf = 1
-                    # print(class_id, filename)
-            conf_det = df.loc[df.image_name == filename,'confidence_score'].values[0]
-            # conf_new = 0.5*conf_det + conf*0.5
-            conf_new = conf
-            # if conf_det < 0.4:
-            #     df.drop(df[df.image_name == filename].index, inplace=True)
-            #     print(filename)
-            #     continue
-            out_file.write(f'{filename} {class_id}\n')
-            df.loc[df.image_name == filename, ['image_name','class_id','confidence_score']]=[filename_new, class_id, conf_new]
+            # class_id = tmp_score.argmax().item()
+            # class_id = id_map[class_id]
+            # conf = tmp_score.max().item()
+
+            filter_id = id_filter[id_file]
+            class_id, conf = post_process(filter_id, tmp_score)  
+            # conf_det = df.loc[df.image_name == filename,'confidence_score'].values[0]
             
+
+            if conf_det < 0.6:
+                # print(df.loc[df.image_name == filename].index)
+                # df.drop(df.loc[df.image_name == filename].index, inplace=True)
+                # continue
+                cv2.imwrite('temp/'+)
+
+            # conf_new = conf
+            df.loc[df.image_name == filename, ['image_name','class_id','confidence_score']]=[filename_new, class_id, 1.0]
             
+    os.makedirs(os.path.dirname(args.output), exist_ok = True) 
     df.to_csv(args.output,index=False)
   
-         
-    
+
+
+class DataFromCSV(torch.utils.data.Dataset):
+    def __init__(self, csv_file, ocr_root, root_dir, data_size: int):
+        self.root_dir = root_dir
+        self.ocr_root = ocr_root
+        self.data_infos = pd.read_csv(csv_file)
+        normalize = transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406],
+                    std=[0.229, 0.224, 0.225]
+                )
+        self.transforms = transforms.Compose([
+                    transforms.Resize((510, 510), Image.BILINEAR),
+                    transforms.CenterCrop((data_size, data_size)),
+                    transforms.ToTensor(),
+                    normalize
+            ])
+        # self.data_infos = self.getDataInfo(root_dir)
+        pill_pres_map_path = os.path.join(root_dir, 'pill_pres_map.json')
+        self.pill_pres_map = load_map(pill_pres_map_path)
+        self.return_index = True
+
+    def load_map(self, file):
+        f = open(file)
+        pill_pres_map = json.load(f)
+        new_map = dict()
+        for k,v in pill_pres_map.imtes():
+            for i in v:
+                new_map[i] = k
+        return new_map
+
+    def __len__(self):
+        return len(list(self.data_infos))
+
+    def __getitem__(self, index):
+        img_name = self.data_infos.iloc[index]['image_name']
+        image_path = os.path.join(self.root_dir, 'pill/image', img_name)
+        # label = self.data_infos.iloc[index]['class_id']
+        # read image by opencv.
+        img = cv2.imread(image_path)
+        img = img[:, :, ::-1] # BGR to RGB.
+
+        # to PIL.Image
+        img = Image.fromarray(img)
+        img = self.transforms(img)
+
+        path_filter_id = os.path.join(self.ocr_root, self.pill_pres_map[img_name])
+        ann = open(path_filter_id,'r').read()
+        filter_id = json.loads(ann)
+
+        if self.return_index:
+            # return index, img, sub_imgs, label, sub_boundarys
+            return index, image_path, img, filter_id
+        
+        # return img, sub_imgs, label, sub_boundarys
+        return image_path,img, filter_id
+
+
+
 class DataCustom(torch.utils.data.Dataset):
     def __init__(self, 
                  istrain: bool,
@@ -145,47 +200,36 @@ class DataCustom(torch.utils.data.Dataset):
         # 448:600
         # 384:510
         # 768:
-                            # 
-
-        self.transforms = transforms.Compose([
-                    transforms.Resize((510, 510), Image.BILINEAR),
-                    transforms.CenterCrop((data_size, data_size)),
-                    transforms.ToTensor(),
-                    normalize
-            ])
+        if istrain:
+            # transforms.RandomApply([RandAugment(n=2, m=3, img_size=data_size)], p=0.1)
+            # RandAugment(n=2, m=3, img_size=sub_data_size)
+            self.transforms = transforms.Compose([
+                        transforms.Resize((510, 510), Image.BILINEAR),
+                        transforms.RandomCrop((data_size, data_size)),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.RandomApply([transforms.GaussianBlur(kernel_size=(5, 5), sigma=(0.1, 5))], p=0.1),
+                        transforms.RandomAdjustSharpness(sharpness_factor=1.5, p=0.1),
+                        transforms.ToTensor(),
+                        normalize
+                ])
+        else:
+            self.transforms = transforms.Compose([
+                        transforms.Resize((510, 510), Image.BILINEAR),
+                        transforms.CenterCrop((data_size, data_size)),
+                        transforms.ToTensor(),
+                        normalize
+                ])
 
         """ read all data information """
         self.data_infos = self.getDataInfo(root)
 
-    def load_ids(self):
-        ids_filter = dict()
-        files = os.listdir(self.root_ocr)
-        for file in files:
-            id_file = re.findall('[0-9]+',file)[0]
-            
-            path_file = os.path.join(self.root_ocr, file)
-
-            ann = open(path_file,'r').read()
-
-            classes = json.loads(ann)
-            
-            ids_filter[id_file] = classes
-        return ids_filter
-
     def getDataInfo(self, root):
         data_infos = []
-        id_filter = self.load_ids()
         files = os.listdir(root)
         for file in files:
             data_path = os.path.join(root, file)
             id_file = re.findall('[0-9]+',file)[0]
-            arr = np.zeros( 108)
-            try:
-                arr[id_filter[id_file]] = 1
-            except:
-                arr[-1] = 1
-
-            data_infos.append({"path":data_path,"onehot":arr, "label":1})
+            data_infos.append({"path":data_path, "label":1})
         return data_infos
 
     def __len__(self):
@@ -194,7 +238,6 @@ class DataCustom(torch.utils.data.Dataset):
     def __getitem__(self, index):
         # get data information.
         image_path = self.data_infos[index]["path"]
-        onehot = self.data_infos[index]["onehot"]
         label = self.data_infos[index]["label"]
         # read image by opencv.
         img = cv2.imread(image_path)
@@ -203,13 +246,12 @@ class DataCustom(torch.utils.data.Dataset):
         # to PIL.Image
         img = Image.fromarray(img)
         img = self.transforms(img)
-        onehot=torch.Tensor(onehot)
         if self.return_index:
             # return index, img, sub_imgs, label, sub_boundarys
-            return index, image_path, img, onehot,label
+            return index, image_path, img,label
         
         # return img, sub_imgs, label, sub_boundarys
-        return image_path,img, onehot, label
+        return image_path,img, label
 
 if __name__ == "__main__":
     tlogger = timeLogger()

@@ -30,6 +30,7 @@ def get_args(with_deepspeed: bool=False):
     parser.add_argument("--ocr_root", default="/mlcv/WorkingSpace/Personals/hungcv/BKAI_VAIPE/OCR/yolov7/output/exp/labels", type=str, help="path root ocr")
     parser.add_argument("--input_root", default='/mlcv/WorkingSpace/Personals/hungcv/temp/output/detect/exp2/crop_output/', type=str, help="")
     parser.add_argument("--output", default='../output/output.csv', type=str, help="")
+    parser.add_argument("--test_path", default='/data/private_test', type=str, help="")
 
     ### about dataset
     parser.add_argument("--train_root", default="", type=str) # "../NABirds/train/"

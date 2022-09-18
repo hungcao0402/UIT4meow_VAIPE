@@ -5,7 +5,7 @@ wandb_entity: hungcao0402
 train_root: ~
 val_root: ~
 data_size: 384
-num_workers: 4
+num_workers: 8
 batch_size: 32
 model_name: swin-t
 pretrained: ../weights/108_class.pt  
